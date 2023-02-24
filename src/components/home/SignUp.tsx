@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 import styled from "styled-components";
 
@@ -178,10 +178,17 @@ export default function SingUp() {
                   body: JSON.stringify(data),
                 }).then((result) => result.json());
 
-                router.push("/");
+                router.push({ pathname: "/", query: { name: isSignUp.id } });
               }}
             >
               Register
+            </button>
+            <button
+              onClick={() => {
+                router.push({ pathname: "/", query: { name: "vavava" } });
+              }}
+            >
+              임시
             </button>
           </ButtonBox>
         </FormContainer>

@@ -1,3 +1,4 @@
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
@@ -88,13 +89,22 @@ const ButtonWrapper = styled.div`
     transform: translateY(-2px);
   }
 `;
-export default function LoginForm() {
+interface Props {
+  readonly name: string | null;
+}
+
+const LoginForm: NextPage<Props> = ({ name }) => {
   const router = useRouter();
   return (
     <Container>
       <form action="/api/hello" method="post">
         <IdInputBox>
-          <input type="text" id="id_blank" name="id" />
+          <input
+            type="text"
+            id="id_blank"
+            name="id"
+            defaultValue={name === null ? "" : name}
+          />
           <label htmlFor="id_blank">아이디</label>
         </IdInputBox>
         <PassInputBox>
@@ -115,4 +125,6 @@ export default function LoginForm() {
       </form>
     </Container>
   );
-}
+};
+
+export default LoginForm;

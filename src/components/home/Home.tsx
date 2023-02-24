@@ -2,6 +2,7 @@ import React from "react";
 import LoginForm from "./LoginForm";
 import styled from "styled-components";
 import bgImage from "../../assest/images/grass.jpg";
+import { NextPage } from "next";
 
 const Container = styled.div`
   width: 100%;
@@ -12,14 +13,19 @@ const Container = styled.div`
   align-items: center;
 `;
 
-export default function Home() {
-  console.log(bgImage);
+interface Props {
+  readonly name: string | null;
+}
+
+const Home: NextPage<Props> = ({ name }) => {
   return (
     <Container>
-      <LoginForm />
+      <LoginForm name={name} />
     </Container>
   );
-}
+};
+
+export default Home;
 
 // type StaticImageData = {
 //   src: string;
