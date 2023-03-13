@@ -1,13 +1,71 @@
-import { Html, Head, Main, NextScript } from 'next/document'
+// import { Html, Head, Main, NextScript } from "next/document";
+// import Document, { DocumentContext, DocumentInitialProps } from "next/document";
+// import { NextPage } from "next";
 
-export default function Document() {
-  return (
-    <Html lang="en">
-      <Head />
-      <body>
-        <Main />
-        <NextScript />
-      </body>
-    </Html>
-  )
+// const MyDocument: NextPage = () => {
+//   return (
+//     <Html lang="en">
+//       <Head />
+//       <body>
+//         <Main />
+//         <NextScript />
+//       </body>
+//     </Html>
+//   );
+// };
+
+// MyDocument.getInitialProps = async (
+//   ctx: DocumentContext
+// ): Promise<DocumentInitialProps> => {
+//   const initialProps = await Document.getInitialProps(ctx);
+
+//   return initialProps;
+// };
+// export default MyDocument;
+
+// export default function Document() {
+
+// return (
+//   <Html lang="en">
+//     <Head />
+//     <body>
+//       <Main />
+//       <NextScript />
+//     </body>
+//   </Html>
+// )
+// }
+/**
+ *  @see https://medium.com/swlh/server-side-rendering-styled-components-with-nextjs-1db1353e915e
+ */
+
+import Document, { DocumentContext } from "next/document";
+import { ServerStyleSheet } from "styled-components";
+
+export default class MyDocument extends Document {
+  static async getInitialProps(ctx: DocumentContext) {
+    const sheet = new ServerStyleSheet();
+    const originalRenderPage = ctx.renderPage;
+
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: (App) => (props) =>
+            sheet.collectStyles(<App {...props} />),
+        });
+
+      const initialProps = await Document.getInitialProps(ctx);
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        ),
+      };
+    } finally {
+      sheet.seal();
+    }
+  }
 }
